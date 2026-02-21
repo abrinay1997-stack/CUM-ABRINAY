@@ -145,7 +145,12 @@ const handler: Handler = async (event) => {
   }
 
   // Save to Netlify Blobs
-  const store = getStore({ name: "registrations", consistency: "strong" });
+  const store = getStore({
+    name: "registrations",
+    consistency: "strong",
+    siteID: process.env.NETLIFY_SITE_ID!,
+    token: process.env.NETLIFY_TOKEN!,
+  });
   const existing: Registration[] = (await store.get("all", { type: "json" })) ?? [];
 
   const newReg: Registration = {
