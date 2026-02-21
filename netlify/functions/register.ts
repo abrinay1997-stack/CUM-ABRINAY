@@ -163,8 +163,8 @@ const handler: Handler = async (event) => {
   const updated = [newReg, ...existing];
   await store.setJSON("all", updated);
 
-  // Send emails (non-blocking — registration succeeds even if email fails)
-  Promise.allSettled([
+  // Send emails (awaited so Lambda doesn't terminate before they're sent)
+  const emailResults = await Promise.allSettled([
     transporter.sendMail({
       from: `"LICENCIA P" <${process.env.GMAIL_USER}>`,
       to: newReg.email,
@@ -177,10 +177,9 @@ const handler: Handler = async (event) => {
       subject: `[LP] Nuevo registro: ${newReg.name}`,
       html: adminEmailHtml(newReg.name, newReg.email, updated.length),
     }),
-  ]).then((results) => {
-    results.forEach((r) => {
-      if (r.status === "rejected") console.error("Email error:", r.reason);
-    });
+  ]);
+  emailResults.forEach((r) => {
+    if (r.status === "rejected") console.error("Email error:", r.reason);
   });
 
   return {
