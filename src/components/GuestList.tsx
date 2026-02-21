@@ -1,45 +1,84 @@
 import { motion } from 'motion/react';
-import { User } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-interface GuestListProps {
-  guests: string[];
+interface Signature {
+  id: number;
+  name: string;
 }
 
-export default function GuestList({ guests }: GuestListProps) {
+interface GuestListProps {
+  guests: string[]; // Kept for compatibility but we'll use internal state for the board
+}
+
+export default function GuestList({ guests: initialGuests }: GuestListProps) {
+  const [signatures, setSignatures] = useState<Signature[]>([]);
+
+  const fetchSignatures = async () => {
+    try {
+      const res = await fetch('/api/signatures');
+      if (res.ok) {
+        const data = await res.json();
+        setSignatures(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch signatures", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSignatures();
+    // Poll for new signatures every 5 seconds
+    const interval = setInterval(fetchSignatures, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Colors for signatures to rotate through
+  const colors = [
+    'text-neon-pink drop-shadow-[0_0_5px_#ff00ff]',
+    'text-neon-cyan drop-shadow-[0_0_5px_#00f3ff]',
+    'text-neon-purple drop-shadow-[0_0_5px_#bc13fe]',
+    'text-neon-yellow drop-shadow-[0_0_5px_#fcee0a]',
+    'text-white drop-shadow-[0_0_5px_#ffffff]'
+  ];
+
   return (
-    <section className="py-24 px-4 bg-[#050505] border-t border-white/5 relative">
-      {/* Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-20 z-0" />
+    <section className="py-24 px-4 bg-[#050505] border-t border-white/5 relative overflow-hidden">
+      {/* Background Texture */}
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-wall.png')] opacity-50 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black z-0 pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <h2 className="text-3xl md:text-4xl font-cyber text-center text-white mb-16 uppercase tracking-widest">
-          <span className="text-neon-cyan">Invitados</span> Confirmados
+        <h2 className="text-4xl md:text-6xl font-cyber text-center text-white mb-4 uppercase tracking-widest">
+          MURO DE <span className="text-neon-pink">FIRMAS</span>
         </h2>
+        <p className="text-center text-gray-400 font-tech mb-16 text-lg">
+          Deja tu marca en la historia de la noche.
+        </p>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {guests.map((guest, index) => (
-            <motion.div
-              key={`${guest}-${index}`}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.05 }}
-              className="group relative bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm hover:border-neon-purple/50 transition-all duration-300 hover:bg-white/10 overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-neon-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              <div className="flex items-center gap-3 relative z-10">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-neon-purple to-neon-pink p-[1px]">
-                  <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
-                    <User className="w-5 h-5 text-gray-300" />
-                  </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-12 p-8 bg-white/5 rounded-3xl border border-white/10 backdrop-blur-sm shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] min-h-[400px]">
+          {signatures.map((sig, index) => {
+            // Deterministic random rotation based on name length
+            const rotation = (sig.name.length % 10 - 5) * 2; 
+            const colorClass = colors[index % colors.length];
+            
+            return (
+              <motion.div
+                key={sig.id}
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
+                className="flex items-center justify-center"
+              >
+                <div 
+                  className={`font-signature text-3xl md:text-5xl ${colorClass} transform hover:scale-110 transition-transform duration-300 cursor-default`}
+                  style={{ transform: `rotate(${rotation}deg)` }}
+                >
+                  {sig.name}
                 </div>
-                <span className="text-gray-200 font-tech text-lg tracking-wide group-hover:text-neon-cyan transition-colors truncate">
-                  {guest}
-                </span>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

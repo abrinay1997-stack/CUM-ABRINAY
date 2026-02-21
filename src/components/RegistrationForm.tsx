@@ -24,12 +24,24 @@ export default function RegistrationForm({ onNewGuest }: RegistrationFormProps) 
 
     setStatus('submitting');
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setStatus('success');
-    onNewGuest(formData.name);
-    setFormData({ name: '', email: '', isAdult: false });
+    try {
+      const response = await fetch('/api/signatures', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: formData.name }),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        onNewGuest(formData.name); // Updates local state immediately for UX
+        setFormData({ name: '', email: '', isAdult: false });
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error("Error submitting form", error);
+      setStatus('error');
+    }
     
     setTimeout(() => setStatus('idle'), 5000);
   };

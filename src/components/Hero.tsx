@@ -1,38 +1,8 @@
-import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ChevronDown, Zap } from 'lucide-react';
+import Countdown from './Countdown';
 
 export default function Hero() {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-
-  useEffect(() => {
-    const targetDate = new Date('2026-03-07T00:00:00-05:00').getTime();
-
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      if (distance < 0) {
-        clearInterval(interval);
-        return;
-      }
-
-      setTimeLeft({
-        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((distance % (1000 * 60)) / 1000),
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#050505] text-white pt-20 pb-10">
       {/* Cyberpunk Grid Background */}
@@ -118,28 +88,7 @@ export default function Hero() {
         </motion.div>
 
         {/* Countdown */}
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-          className="grid grid-cols-4 gap-3 md:gap-6 text-center w-full max-w-3xl"
-        >
-          {Object.entries(timeLeft).map(([unit, value]) => (
-            <div key={unit} className="flex flex-col items-center group">
-              <div className="relative w-full aspect-square md:aspect-auto md:h-32 flex items-center justify-center bg-black/40 border border-neon-cyan/30 rounded-xl backdrop-blur-xl overflow-hidden group-hover:border-neon-cyan/80 transition-all duration-300 shadow-[0_0_20px_rgba(0,243,255,0.05)]">
-                <div className="absolute inset-0 bg-gradient-to-b from-neon-cyan/5 to-transparent opacity-50" />
-                <span className="relative text-3xl md:text-6xl font-cyber font-bold text-white drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]">
-                  {String(value).padStart(2, '0')}
-                </span>
-                {/* Scanline effect */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.5)_50%)] bg-[size:100%_4px] pointer-events-none opacity-30" />
-              </div>
-              <span className="text-[10px] md:text-sm uppercase tracking-[0.2em] text-neon-purple mt-3 font-cyber font-bold">
-                {unit === 'days' ? 'Días' : unit === 'hours' ? 'Horas' : unit === 'minutes' ? 'Min' : 'Seg'}
-              </span>
-            </div>
-          ))}
-        </motion.div>
+        <Countdown targetDate="2026-03-07T00:00:00-05:00" />
       </div>
 
       {/* Scroll Indicator */}

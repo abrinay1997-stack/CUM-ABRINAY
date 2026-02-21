@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Montserrat:wght@300;400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Montserrat:wght@300;400;500;600;700;900&family=Mr+Dafoe&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-cyber: "Abril Fatface", ui-serif, Georgia, serif;
   --font-tech: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-signature: "Mr Dafoe", cursive;
   
   --color-neon-cyan: #00f3ff;
   --color-neon-pink: #ff00ff;
