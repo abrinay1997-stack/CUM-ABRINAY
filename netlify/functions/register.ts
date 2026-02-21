@@ -1,6 +1,6 @@
 import type { Handler } from "@netlify/functions";
 import { getStore } from "@netlify/blobs";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 interface Registration {
   id: string;
@@ -9,13 +9,7 @@ interface Registration {
   createdAt: string;
 }
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const userEmailHtml = (name: string) => `
 <!DOCTYPE html>
@@ -165,21 +159,22 @@ const handler: Handler = async (event) => {
 
   // Send emails (awaited so Lambda doesn't terminate before they're sent)
   const emailResults = await Promise.allSettled([
-    transporter.sendMail({
-      from: `"LICENCIA P" <${process.env.GMAIL_USER}>`,
+    resend.emails.send({
+      from: "LICENCIA P <onboarding@resend.dev>",
       to: newReg.email,
       subject: "ACCESO CONCEDIDO — LICENCIA P · 7 MAR 2026",
       html: userEmailHtml(newReg.name),
     }),
-    transporter.sendMail({
-      from: `"LICENCIA P" <${process.env.GMAIL_USER}>`,
-      to: process.env.ADMIN_EMAIL,
+    resend.emails.send({
+      from: "LICENCIA P <onboarding@resend.dev>",
+      to: process.env.ADMIN_EMAIL!,
       subject: `[LP] Nuevo registro: ${newReg.name}`,
       html: adminEmailHtml(newReg.name, newReg.email, updated.length),
     }),
   ]);
   emailResults.forEach((r) => {
     if (r.status === "rejected") console.error("Email error:", r.reason);
+    if (r.status === "fulfilled" && r.value.error) console.error("Email error:", r.value.error);
   });
 
   return {
