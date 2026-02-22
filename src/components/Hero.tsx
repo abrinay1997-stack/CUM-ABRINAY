@@ -2,62 +2,136 @@ import { motion } from 'motion/react';
 import { ChevronDown, Zap } from 'lucide-react';
 import Countdown from './Countdown';
 
+const CORNERS = [
+  'top-0 left-0 border-t-2 border-l-2',
+  'top-0 right-0 border-t-2 border-r-2',
+  'bottom-0 left-0 border-b-2 border-l-2',
+  'bottom-0 right-0 border-b-2 border-r-2',
+] as const;
+
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#050505] text-white pt-20 pb-10">
-      {/* Neon Glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-neon-purple/20 blur-[120px] rounded-full z-0 pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-neon-cyan/10 blur-[100px] rounded-full z-0 pointer-events-none" />
+      {/* Ambient glows — these are background-only, no filter on content ancestors */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-neon-purple/15 blur-[140px] rounded-full z-0 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-neon-cyan/10 blur-[120px] rounded-full z-0 pointer-events-none" />
 
       {/* Main Content */}
       <div className="z-10 text-center px-4 max-w-5xl mx-auto flex flex-col items-center w-full">
-        
-        {/* Animated Logo */}
+
+        {/* ── LOGO ────────────────────────────────────────────────────── */}
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
+          initial={{ scale: 0.88, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8, ease: "circOut" }}
-          className="relative mb-8 group"
+          transition={{ duration: 1, ease: 'circOut' }}
+          className="relative mb-8 flex flex-col items-center select-none"
         >
-          <div className="absolute inset-0 bg-neon-pink/30 blur-3xl rounded-full animate-pulse" />
-          <div className="relative text-[8rem] md:text-[12rem] leading-none font-cyber font-black flex items-center justify-center tracking-tighter">
-            <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-b from-white via-neon-cyan to-neon-purple">P</span>
+          {/* Scan-bracket corners */}
+          <div className="absolute -inset-4 pointer-events-none">
+            {CORNERS.map((cls, i) => (
+              <motion.div
+                key={i}
+                className={`absolute w-7 h-7 border-neon-cyan/50 ${cls}`}
+                initial={{ opacity: 0, scale: 0.4 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.7 + i * 0.08, duration: 0.4 }}
+              />
+            ))}
+          </div>
+
+          {/* ABRINAY PRESENTS */}
+          <motion.p
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, duration: 0.6 }}
+            className="font-cyber text-[10px] md:text-xs uppercase mb-3"
+            style={{
+              color: '#00f3ff',
+              letterSpacing: '0.6em',
+              textShadow: '0 0 6px #00f3ff, 0 0 14px #00f3ff',
+            }}
+          >
+            ABRINAY PRESENTS
+          </motion.p>
+
+          {/* LICENCIA label */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.45, duration: 0.7 }}
+            className="font-cyber font-black text-xl md:text-3xl uppercase"
+            style={{
+              color: '#d580ff',
+              letterSpacing: '0.45em',
+              textShadow: '0 0 6px #bc13fe, 0 0 18px #bc13fe, 0 0 36px #bc13fe',
+            }}
+          >
+            LICENCIA
+          </motion.p>
+
+          {/* Giant P — neon tube effect via text-shadow, zero bg-clip-text */}
+          <div className="relative">
+            {/* Scanlines overlay — pure CSS, no filter */}
+            <div
+              className="absolute inset-0 z-10 pointer-events-none opacity-[0.06]"
+              style={{
+                backgroundImage:
+                  'repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 4px)',
+              }}
+            />
+
+            {/* Main letter — text-shadow glow, breathing animation */}
             <motion.span
-              aria-hidden
-              className="absolute inset-0 flex items-center justify-center text-neon-pink z-0"
-              animate={{ x: [-2, 2, -2], opacity: [0, 0.5, 0] }}
-              transition={{ duration: 0.1, repeat: Infinity, repeatDelay: 3 }}
+              className="font-cyber font-black text-[8.5rem] md:text-[13rem] leading-none block"
+              style={{ color: '#e8f5ff' }}
+              animate={{
+                textShadow: [
+                  '0 0 5px #fff, 0 0 12px #fff, 0 0 22px #fff, 0 0 45px #bc13fe, 0 0 85px #bc13fe, 0 0 95px #bc13fe',
+                  '0 0 5px #fff, 0 0 14px #fff, 0 0 26px #fff, 0 0 55px #bc13fe, 0 0 105px #bc13fe, 0 0 135px #bc13fe',
+                  '0 0 4px #fff, 0 0 10px #fff, 0 0 20px #fff, 0 0 38px #bc13fe, 0 0 75px #bc13fe, 0 0 88px #bc13fe',
+                  '0 0 5px #fff, 0 0 12px #fff, 0 0 22px #fff, 0 0 45px #bc13fe, 0 0 85px #bc13fe, 0 0 95px #bc13fe',
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
             >
               P
             </motion.span>
-            <motion.span 
-              className="absolute -top-4 -right-8 md:-right-12 text-[6rem] md:text-[8rem] text-neon-yellow drop-shadow-[0_0_15px_rgba(252,238,10,0.8)]"
-              animate={{ 
-                rotate: [0, 10, -5, 0],
-                textShadow: ["0 0 10px #fcee0a", "0 0 30px #fcee0a", "0 0 10px #fcee0a"]
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              ?
-            </motion.span>
+
+            {/* Glitch strip 1 — pink horizontal tear */}
+            <motion.span
+              aria-hidden
+              className="absolute inset-0 font-cyber font-black text-[8.5rem] md:text-[13rem] leading-none block"
+              style={{ color: '#ff00ff', clipPath: 'inset(22% 0 52% 0)' }}
+              animate={{ x: [-9, 9, -9], opacity: [0, 0.85, 0] }}
+              transition={{ duration: 0.08, repeat: Infinity, repeatDelay: 6.5 }}
+            />
+
+            {/* Glitch strip 2 — cyan bottom slice */}
+            <motion.span
+              aria-hidden
+              className="absolute inset-0 font-cyber font-black text-[8.5rem] md:text-[13rem] leading-none block"
+              style={{ color: '#00f3ff', clipPath: 'inset(58% 0 18% 0)' }}
+              animate={{ x: [6, -6, 6], opacity: [0, 0.6, 0] }}
+              transition={{ duration: 0.08, repeat: Infinity, repeatDelay: 6.5, delay: 0.04 }}
+            />
           </div>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-          className="mb-12 space-y-4 relative"
-        >
-          <div className="absolute -inset-4 bg-gradient-to-r from-neon-purple/0 via-neon-purple/10 to-neon-purple/0 blur-xl -z-10" />
-          <h2 className="text-lg md:text-xl font-cyber text-neon-cyan tracking-[0.3em] uppercase border-b border-neon-cyan/30 pb-2 inline-block">
-            ABRINAY PRESENTS
-          </h2>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-cyber font-bold text-white tracking-tight drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-            LICENCIA <span className="text-neon-pink glitch-text">P</span>
-          </h1>
+          {/* Gradient separator line */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.6, duration: 0.9 }}
+            className="w-44 md:w-72 h-px mt-2"
+            style={{
+              background:
+                'linear-gradient(to right, transparent, #bc13fe 35%, #00f3ff 65%, transparent)',
+              boxShadow: '0 0 8px #bc13fe',
+            }}
+          />
         </motion.div>
+        {/* ── END LOGO ─────────────────────────────────────────────── */}
 
+        {/* Event info badges */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -95,13 +169,12 @@ export default function Hero() {
         animate={{ y: [0, 10, 0], opacity: [0.5, 1, 0.5] }}
         transition={{ duration: 2, repeat: Infinity }}
         onClick={() => {
-          const nextSection = document.getElementById('description');
-          nextSection?.scrollIntoView({ behavior: 'smooth' });
+          document.getElementById('description')?.scrollIntoView({ behavior: 'smooth' });
         }}
       >
         <div className="flex flex-col items-center gap-2">
           <span className="text-[10px] uppercase tracking-widest text-neon-cyan font-cyber">Scroll</span>
-          <ChevronDown className="w-8 h-8 text-neon-cyan drop-shadow-[0_0_10px_rgba(0,243,255,0.8)]" />
+          <ChevronDown className="w-8 h-8 text-neon-cyan" style={{ filter: 'drop-shadow(0 0 6px #00f3ff)' }} />
         </div>
       </motion.div>
     </section>
