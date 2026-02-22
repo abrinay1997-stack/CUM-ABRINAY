@@ -161,15 +161,18 @@ const handler: Handler = async (event) => {
   const emailResults = await Promise.allSettled([
     resend.emails.send({
       from: "LICENCIA P <noreply@bukoflow.com>",
+      reply_to: "abrinay1997@gmail.com",
       to: newReg.email,
-      subject: "ACCESO CONCEDIDO — LICENCIA P · 7 MAR 2026",
+      subject: "Tu acceso a LICENCIA P — 7 de Marzo 2026",
       html: userEmailHtml(newReg.name),
+      text: `Hola ${newReg.name},\n\nTu registro para LICENCIA P ha sido confirmado.\n\nFecha: 7 de Marzo, 2026\nLugar: Vía Argentina, Panamá\nDress Code: Cyberpunk Sexy\nAcceso: Lista VIP · +18\n\nGuarda este correo, será tu pase de entrada. Los detalles exactos de ubicación serán enviados próximos al evento.\n\nLICENCIA P · 7 MAR 2026 · PTY`,
     }),
     resend.emails.send({
       from: "LICENCIA P <noreply@bukoflow.com>",
       to: process.env.ADMIN_EMAIL!,
-      subject: `[LP] Nuevo registro: ${newReg.name}`,
+      subject: `Nuevo registro: ${newReg.name}`,
       html: adminEmailHtml(newReg.name, newReg.email, updated.length),
+      text: `Nuevo registro en LICENCIA P\n\nNombre: ${newReg.name}\nEmail: ${newReg.email}\nFecha: ${new Date().toLocaleString("es-PA", { timeZone: "America/Panama" })}\n\nTotal registrados: ${updated.length}`,
     }),
   ]);
   emailResults.forEach((r) => {
