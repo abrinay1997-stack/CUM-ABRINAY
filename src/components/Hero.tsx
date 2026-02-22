@@ -20,15 +20,16 @@ export default function Hero() {
           className="relative mb-8 group"
         >
           <div className="absolute inset-0 bg-neon-pink/30 blur-3xl rounded-full animate-pulse" />
-          <div className="relative text-[8rem] md:text-[12rem] leading-none font-cyber font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-neon-cyan to-neon-purple flex items-center justify-center tracking-tighter">
-            <span className="relative z-10">P</span>
-            <motion.div 
-              className="absolute inset-0 text-neon-pink mix-blend-screen z-0"
-              animate={{ x: [-2, 2, -2], opacity: [0.5, 0.8, 0.5] }}
+          <div className="relative text-[8rem] md:text-[12rem] leading-none font-cyber font-black flex items-center justify-center tracking-tighter">
+            <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-b from-white via-neon-cyan to-neon-purple">P</span>
+            <motion.span
+              aria-hidden
+              className="absolute inset-0 flex items-center justify-center text-neon-pink z-0"
+              animate={{ x: [-2, 2, -2], opacity: [0, 0.5, 0] }}
               transition={{ duration: 0.1, repeat: Infinity, repeatDelay: 3 }}
             >
               P
-            </motion.div>
+            </motion.span>
             <motion.span 
               className="absolute -top-4 -right-8 md:-right-12 text-[6rem] md:text-[8rem] text-neon-yellow drop-shadow-[0_0_15px_rgba(252,238,10,0.8)]"
               animate={{ 
