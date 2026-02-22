@@ -22,7 +22,12 @@ const handler: Handler = async (event) => {
     return { statusCode: 405, headers, body: JSON.stringify({ error: "Method not allowed" }) };
   }
 
-  const store = getStore({ name: "registrations", consistency: "strong" });
+  const store = getStore({
+    name: "registrations",
+    consistency: "strong",
+    siteID: process.env.NETLIFY_SITE_ID!,
+    token: process.env.NETLIFY_TOKEN!,
+  });
   const all: Registration[] = (await store.get("all", { type: "json" })) ?? [];
 
   // Return only id + name (never expose emails)
