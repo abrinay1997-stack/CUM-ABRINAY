@@ -12,15 +12,7 @@ const CORNERS = [
 export default function Hero() {
   return (
     <section
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-white pt-20 pb-10"
-      style={{
-        /* radial-gradient reemplaza los divs con filter:blur() — cero compositing layers */
-        background: `
-          radial-gradient(ellipse 70% 50% at 50% -5%, rgba(188,19,254,0.20) 0%, transparent 68%),
-          radial-gradient(ellipse 55% 45% at 100% 105%, rgba(0,243,255,0.13) 0%, transparent 58%),
-          #050505
-        `,
-      }}
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-white pt-20 pb-10 bg-black"
     >
 
       {/* Main Content */}
