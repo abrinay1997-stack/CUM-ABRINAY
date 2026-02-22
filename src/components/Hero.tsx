@@ -11,10 +11,17 @@ const CORNERS = [
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#050505] text-white pt-20 pb-10">
-      {/* Ambient glows — these are background-only, no filter on content ancestors */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-neon-purple/15 blur-[140px] rounded-full z-0 pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-neon-cyan/10 blur-[120px] rounded-full z-0 pointer-events-none" />
+    <section
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-white pt-20 pb-10"
+      style={{
+        /* radial-gradient reemplaza los divs con filter:blur() — cero compositing layers */
+        background: `
+          radial-gradient(ellipse 70% 50% at 50% -5%, rgba(188,19,254,0.20) 0%, transparent 68%),
+          radial-gradient(ellipse 55% 45% at 100% 105%, rgba(0,243,255,0.13) 0%, transparent 58%),
+          #050505
+        `,
+      }}
+    >
 
       {/* Main Content */}
       <div className="z-10 text-center px-4 max-w-5xl mx-auto flex flex-col items-center w-full">
@@ -144,7 +151,7 @@ export default function Hero() {
       >
         <div className="flex flex-col items-center gap-2">
           <span className="text-[10px] uppercase tracking-widest text-neon-cyan font-cyber">Scroll</span>
-          <ChevronDown className="w-8 h-8 text-neon-cyan" style={{ filter: 'drop-shadow(0 0 6px #00f3ff)' }} />
+          <ChevronDown className="w-8 h-8 text-neon-cyan" />
         </div>
       </motion.div>
     </section>
