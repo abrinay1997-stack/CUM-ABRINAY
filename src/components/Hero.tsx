@@ -68,22 +68,52 @@ export default function Hero() {
             LICENCIA
           </motion.p>
 
-          {/* Giant P — neon tube via text-shadow only, no clip-path, no filter */}
-          <motion.span
-            className="font-cyber font-black text-[7.5rem] md:text-[13rem] leading-none block"
-            style={{ color: '#e8f5ff' }}
-            animate={{
-              textShadow: [
-                '0 0 5px #fff, 0 0 12px #fff, 0 0 22px #fff, 0 0 45px #bc13fe, 0 0 85px #bc13fe, 0 0 95px #bc13fe',
-                '0 0 5px #fff, 0 0 14px #fff, 0 0 28px #fff, 0 0 58px #bc13fe, 0 0 110px #bc13fe, 0 0 140px #bc13fe',
-                '0 0 4px #fff, 0 0 10px #fff, 0 0 19px #fff, 0 0 38px #bc13fe, 0 0 72px #bc13fe, 0 0 85px #bc13fe',
-                '0 0 5px #fff, 0 0 12px #fff, 0 0 22px #fff, 0 0 45px #bc13fe, 0 0 85px #bc13fe, 0 0 95px #bc13fe',
-              ],
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            P
-          </motion.span>
+          {/* Giant P + ? — neon tube, no filter */}
+          <div className="flex items-end gap-1 md:gap-2">
+            <motion.span
+              className="font-cyber font-black text-[7.5rem] md:text-[13rem] leading-none"
+              style={{ color: '#e8f5ff' }}
+              animate={{
+                textShadow: [
+                  '0 0 4px #fff, 0 0 8px #fff, 0 0 14px #fff, 0 0 25px #bc13fe, 0 0 45px #bc13fe, 0 0 52px #bc13fe',
+                  '0 0 4px #fff, 0 0 9px #fff, 0 0 18px #fff, 0 0 32px #bc13fe, 0 0 60px #bc13fe, 0 0 75px #bc13fe',
+                  '0 0 3px #fff, 0 0 7px #fff, 0 0 12px #fff, 0 0 20px #bc13fe, 0 0 38px #bc13fe, 0 0 45px #bc13fe',
+                  '0 0 4px #fff, 0 0 8px #fff, 0 0 14px #fff, 0 0 25px #bc13fe, 0 0 45px #bc13fe, 0 0 52px #bc13fe',
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              P
+            </motion.span>
+
+            {/* ? — neon tube flickering (broken sign effect) */}
+            <motion.span
+              className="font-cyber font-black text-[3.5rem] md:text-[6rem] leading-none pb-3 md:pb-6"
+              style={{ color: '#00f3ff' }}
+              animate={{
+                opacity:    [1,    1,    0.08, 1,    1,    0.9,  0.05, 1,    1   ],
+                textShadow: [
+                  '0 0 4px #00f3ff, 0 0 10px #00f3ff, 0 0 22px #00f3ff',
+                  '0 0 4px #00f3ff, 0 0 10px #00f3ff, 0 0 22px #00f3ff',
+                  '0 0 1px #00f3ff',
+                  '0 0 4px #00f3ff, 0 0 10px #00f3ff, 0 0 22px #00f3ff',
+                  '0 0 4px #00f3ff, 0 0 10px #00f3ff, 0 0 22px #00f3ff',
+                  '0 0 3px #00f3ff, 0 0 7px #00f3ff',
+                  '0 0 1px #00f3ff',
+                  '0 0 4px #00f3ff, 0 0 10px #00f3ff, 0 0 22px #00f3ff',
+                  '0 0 4px #00f3ff, 0 0 10px #00f3ff, 0 0 22px #00f3ff',
+                ],
+              }}
+              transition={{
+                duration: 4.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                times: [0, 0.28, 0.31, 0.34, 0.55, 0.68, 0.71, 0.74, 1],
+              }}
+            >
+              ?
+            </motion.span>
+          </div>
 
           {/* Gradient separator line */}
           <motion.div
