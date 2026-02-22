@@ -17,7 +17,7 @@ export default function Countdown({ targetDate }: CountdownProps) {
     >
       {Object.entries(timeLeft).map(([unit, value]) => (
         <div key={unit} className="flex flex-col items-center group">
-          <div className="relative w-full aspect-square md:aspect-auto md:h-32 flex items-center justify-center bg-black/40 border border-neon-cyan/30 rounded-xl backdrop-blur-xl overflow-hidden group-hover:border-neon-cyan/80 transition-all duration-300 shadow-[0_0_20px_rgba(0,243,255,0.05)]">
+          <div className="relative w-full aspect-square md:aspect-auto md:h-32 flex items-center justify-center bg-black/40 border border-neon-cyan/30 rounded-xl overflow-hidden group-hover:border-neon-cyan/80 transition-all duration-300 shadow-[0_0_20px_rgba(0,243,255,0.05)]">
             <div className="absolute inset-0 bg-gradient-to-b from-neon-cyan/5 to-transparent opacity-50" />
             <span className="relative text-3xl md:text-6xl font-cyber font-bold text-white" style={{ textShadow: '0 0 10px rgba(0,243,255,0.5)' }}>
               {String(value).padStart(2, '0')}

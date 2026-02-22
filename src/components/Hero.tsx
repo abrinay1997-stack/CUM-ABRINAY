@@ -115,21 +115,21 @@ export default function Hero() {
           transition={{ delay: 0.6, duration: 1 }}
           className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-16 w-full max-w-3xl"
         >
-          <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(0,243,255,0.1)]">
+          <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 shadow-[0_0_15px_rgba(0,243,255,0.1)]">
             <Zap className="w-5 h-5 text-neon-yellow" />
             <span className="text-sm md:text-lg font-tech font-bold text-gray-200 tracking-wider uppercase">
               7 de Marzo, 2026
             </span>
           </div>
           <div className="hidden md:block w-px h-8 bg-white/20" />
-          <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(188,19,254,0.1)]">
+          <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 shadow-[0_0_15px_rgba(188,19,254,0.1)]">
             <span className="w-2 h-2 rounded-full bg-neon-pink animate-ping" />
             <span className="text-sm md:text-lg font-tech font-bold text-gray-200 tracking-wider uppercase">
               Vía Argentina, Panamá
             </span>
           </div>
           <div className="hidden md:block w-px h-8 bg-white/20" />
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-neon-pink/10 border border-neon-pink/50 backdrop-blur-md">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-neon-pink/10 border border-neon-pink/50">
             <span className="text-sm md:text-base font-cyber font-bold text-neon-pink tracking-wider">
               +18
             </span>
