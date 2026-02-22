@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Loader2, Lock, AlertCircle } from 'lucide-react';
 import SuccessOverlay from './SuccessOverlay';
@@ -9,6 +9,14 @@ export default function RegistrationForm() {
   const [errorMsg, setErrorMsg] = useState('');
   const [showOverlay, setShowOverlay] = useState(false);
   const [registeredName, setRegisteredName] = useState('');
+  const [confirmedCount, setConfirmedCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch('/api/signatures')
+      .then(r => r.ok ? r.json() : [])
+      .then((data: Array<{ id: string }>) => setConfirmedCount(data.length))
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,26 +54,41 @@ export default function RegistrationForm() {
         name={registeredName}
       />
 
-      <section className="py-24 px-4 bg-black relative">
+      <section id="registro" className="py-24 px-4 bg-black relative">
         {/* Background glows */}
         <div className="absolute top-1/2 left-0 w-96 h-96 bg-neon-purple/20 blur-[100px] -translate-y-1/2 pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-neon-cyan/20 blur-[100px] pointer-events-none" />
 
         <div className="max-w-md mx-auto relative z-10">
+
+          {/* Urgency badge */}
+          {confirmedCount !== null && (
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center justify-center gap-2 mb-6"
+            >
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              <span className="font-tech text-xs text-gray-300 tracking-widest uppercase">
+                <span className="text-white font-bold">{confirmedCount}</span> ya confirmaron · Lugares limitados
+              </span>
+            </motion.div>
+          )}
+
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="bg-black/60 border border-white/10 p-8 rounded-2xl shadow-[0_0_30px_rgba(0,243,255,0.1)] backdrop-blur-xl relative overflow-hidden"
+            className="bg-black/60 border border-white/10 p-8 rounded-2xl shadow-[0_0_60px_rgba(188,19,254,0.15)] backdrop-blur-xl relative overflow-hidden"
           >
             {/* Top gradient border */}
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-neon-purple via-neon-cyan to-neon-purple" />
 
             <div className="flex justify-center mb-6">
-              <Lock className="w-8 h-8 text-neon-cyan" />
+              <Lock className="w-8 h-8 text-neon-cyan drop-shadow-[0_0_12px_rgba(0,243,255,0.8)]" />
             </div>
 
-            <h2 className="text-3xl font-cyber text-center text-white mb-2 uppercase tracking-wider">
+            <h2 className="text-4xl font-cyber text-center text-white mb-2 uppercase tracking-wider drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
               Asegura tu Lugar
             </h2>
             <p className="text-center text-gray-500 mb-8 text-sm font-tech">
@@ -127,10 +150,12 @@ export default function RegistrationForm() {
                 </motion.div>
               )}
 
-              <button
+              <motion.button
                 type="submit"
                 disabled={status === 'submitting'}
-                className="w-full bg-gradient-to-r from-neon-purple to-neon-pink hover:from-neon-purple/80 hover:to-neon-pink/80 text-white font-cyber font-bold py-4 rounded-lg shadow-[0_0_20px_rgba(188,19,254,0.4)] transform transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 uppercase tracking-widest border border-white/20"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full bg-gradient-to-r from-neon-purple to-neon-pink text-white font-cyber font-bold py-5 rounded-xl shadow-[0_0_40px_rgba(188,19,254,0.5)] hover:shadow-[0_0_60px_rgba(188,19,254,0.7)] transition-shadow disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 uppercase tracking-widest text-lg border border-white/20"
               >
                 {status === 'submitting' ? (
                   <>
@@ -140,7 +165,7 @@ export default function RegistrationForm() {
                 ) : (
                   'Solicitar Acceso'
                 )}
-              </button>
+              </motion.button>
             </form>
           </motion.div>
         </div>
