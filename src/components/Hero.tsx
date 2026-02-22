@@ -5,9 +5,6 @@ import Countdown from './Countdown';
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#050505] text-white pt-20 pb-10">
-      {/* Cyberpunk Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20 z-0" />
-      
       {/* Neon Glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-neon-purple/20 blur-[120px] rounded-full z-0 pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-neon-cyan/10 blur-[100px] rounded-full z-0 pointer-events-none" />
@@ -23,7 +20,7 @@ export default function Hero() {
           className="relative mb-8 group"
         >
           <div className="absolute inset-0 bg-neon-pink/30 blur-3xl rounded-full animate-pulse" />
-          <div className="relative text-[8rem] md:text-[12rem] leading-none font-cyber font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-neon-cyan to-neon-purple drop-shadow-[0_0_25px_rgba(0,243,255,0.6)] flex items-center justify-center tracking-tighter">
+          <div className="relative text-[8rem] md:text-[12rem] leading-none font-cyber font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-neon-cyan to-neon-purple flex items-center justify-center tracking-tighter">
             <span className="relative z-10">P</span>
             <motion.div 
               className="absolute inset-0 text-neon-pink mix-blend-screen z-0"

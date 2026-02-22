@@ -3,9 +3,6 @@ import { motion } from 'motion/react';
 export default function Description() {
   return (
     <section id="description" className="py-24 px-4 bg-[#0a0a0a] relative overflow-hidden">
-      {/* Cyberpunk Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,243,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,243,255,0.03)_1px,transparent_1px)] bg-[size:2rem_2rem] z-0" />
-      
       <div className="max-w-4xl mx-auto text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
