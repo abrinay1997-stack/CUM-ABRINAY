@@ -50,7 +50,7 @@ export default function SuccessOverlay({ show, onClose, name }: SuccessOverlayPr
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.4 } }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/97 backdrop-blur-2xl overflow-hidden"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/97 overflow-hidden"
         >
           {/* Cyberpunk grid */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(0,243,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(0,243,255,0.025)_1px,transparent_1px)] bg-[size:3rem_3rem]" />
@@ -147,7 +147,7 @@ export default function SuccessOverlay({ show, onClose, name }: SuccessOverlayPr
                   transition={{ delay: 0.2 }}
                   className="mb-6 relative"
                 >
-                  <h1 className="text-6xl md:text-8xl font-cyber font-black text-white uppercase leading-none tracking-widest drop-shadow-[0_0_40px_rgba(0,243,255,0.6)]">
+                  <h1 className="text-6xl md:text-8xl font-cyber font-black text-white uppercase leading-none tracking-widest" style={{ textShadow: '0 0 40px rgba(0,243,255,0.6)' }}>
                     ACCESO
                   </h1>
                   {/* Glitch duplicate */}
@@ -158,7 +158,7 @@ export default function SuccessOverlay({ show, onClose, name }: SuccessOverlayPr
                   >
                     ACCESO
                   </motion.h1>
-                  <h1 className="text-6xl md:text-8xl font-cyber font-black text-neon-cyan uppercase leading-none tracking-widest drop-shadow-[0_0_40px_rgba(0,243,255,0.8)]">
+                  <h1 className="text-6xl md:text-8xl font-cyber font-black text-neon-cyan uppercase leading-none tracking-widest" style={{ textShadow: '0 0 40px rgba(0,243,255,0.8)' }}>
                     CONCEDIDO
                   </h1>
                 </motion.div>
@@ -192,7 +192,6 @@ export default function SuccessOverlay({ show, onClose, name }: SuccessOverlayPr
                         strokeDasharray={`${2 * Math.PI * 24}`}
                         strokeDashoffset={`${2 * Math.PI * 24 * (countdown / 4)}`}
                         strokeLinecap="round"
-                        style={{ filter: 'drop-shadow(0 0 4px rgba(0,243,255,0.8))' }}
                         transition={{ duration: 1, ease: 'linear' }}
                       />
                     </svg>
