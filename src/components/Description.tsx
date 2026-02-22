@@ -41,8 +41,8 @@ export default function Description() {
             <div className="mt-12 p-8 border border-neon-pink/30 bg-neon-pink/5 rounded-xl backdrop-blur-sm relative group hover:bg-neon-pink/10 transition-colors duration-500">
               <div className="absolute inset-0 bg-neon-pink/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <p className="text-neon-pink font-cyber tracking-[0.2em] uppercase text-sm mb-3">DRESS CODE</p>
-              <p className="text-white text-2xl md:text-3xl font-cyber font-bold italic mb-2 drop-shadow-[0_0_10px_rgba(255,0,255,0.5)]">"CYBERPUNK SEXY"</p>
-              <p className="text-gray-400 text-base md:text-lg font-tech mt-2">Negro. Neón. Atrevido.</p>
+              <p className="text-white text-2xl md:text-3xl font-cyber font-bold italic mb-2 drop-shadow-[0_0_10px_rgba(255,0,255,0.5)]">"Sexy"</p>
+              <p className="text-gray-400 text-base md:text-lg font-tech mt-2">Neon atrevido.</p>
             </div>
           </div>
         </motion.div>
