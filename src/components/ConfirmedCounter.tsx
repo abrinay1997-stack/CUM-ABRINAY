@@ -1,7 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState, useMemo } from 'react';
-import { motion } from 'motion/react';
-
-const MAX_SPOTS = 100;
+import { useEffect, useRef, useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface Signature {
   id: string;
@@ -19,18 +17,6 @@ const COLOR_STYLES = [
 function nameToColor(name: string) {
   const hash = name.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
   return COLOR_STYLES[hash % COLOR_STYLES.length];
-}
-
-// Deterministic shuffle with seed so each row is always different
-function shuffle<T>(arr: T[], seed: number): T[] {
-  const a = [...arr];
-  let s = seed;
-  for (let i = a.length - 1; i > 0; i--) {
-    s = Math.imul(s, 1664525) + 1013904223;
-    const j = Math.abs(s) % (i + 1);
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
 }
 
 function AnimatedNumber({ value }: { value: number }) {
@@ -56,65 +42,69 @@ function AnimatedNumber({ value }: { value: number }) {
   return <>{display}</>;
 }
 
-// Build enough copies so the ticker always fills the screen regardless of count
-function buildLoop(names: string[]): { items: string[]; copies: number } {
-  if (names.length === 0) return { items: [], copies: 0 };
-  // At least 3 full copies, minimum 30 slots total
-  const copies = Math.max(3, Math.ceil(30 / names.length));
-  const items = Array.from({ length: copies }, () => names).flat();
-  return { items, copies };
-}
+// 16 slots scattered across the area (x/y as percentages)
+const SLOTS = [
+  { x: 5,  y: 7  }, { x: 27, y: 4  }, { x: 52, y: 10 }, { x: 75, y: 6  }, { x: 93, y: 14 },
+  { x: 14, y: 31 }, { x: 38, y: 27 }, { x: 62, y: 34 }, { x: 86, y: 29 },
+  { x: 8,  y: 56 }, { x: 32, y: 53 }, { x: 57, y: 60 }, { x: 79, y: 55 },
+  { x: 21, y: 79 }, { x: 48, y: 77 }, { x: 72, y: 83 },
+] as const;
 
-function NameTicker({
+function FloatingName({
   names,
-  direction = 1,
-  speed = 60,
+  slot,
+  initialDelay,
 }: {
   names: string[];
-  direction?: 1 | -1;
-  speed?: number; // px/second
+  slot: { readonly x: number; readonly y: number };
+  initialDelay: number;
 }) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [unitWidth, setUnitWidth] = useState(0);
-  const { items, copies } = useMemo(() => buildLoop(names), [names]);
+  // Keep a ref to always access latest names without restarting the cycle
+  const namesRef = useRef(names);
+  useEffect(() => { namesRef.current = names; }, [names]);
 
-  useLayoutEffect(() => {
-    const el = wrapRef.current;
-    if (!el || copies === 0) return;
-    // Use rAF to ensure font/layout is settled before measuring
-    const id = requestAnimationFrame(() => {
-      setUnitWidth(el.scrollWidth / copies);
-    });
-    return () => cancelAnimationFrame(id);
-  }, [items, copies]);
+  const [current, setCurrent] = useState({ name: '', visible: false });
 
-  if (names.length === 0) return null;
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout>;
 
-  const duration = unitWidth > 0 ? unitWidth / speed : 30;
-  const dist = direction === 1 ? -unitWidth : unitWidth;
+    const show = () => {
+      const n = namesRef.current;
+      if (!n.length) return;
+      setCurrent({ name: n[Math.floor(Math.random() * n.length)], visible: true });
+      // Visible for 2.2–4.2 seconds
+      t = setTimeout(hide, 2200 + Math.random() * 2000);
+    };
+
+    const hide = () => {
+      setCurrent(s => ({ ...s, visible: false }));
+      // Gap between appearances: 0.7–2 seconds
+      t = setTimeout(show, 700 + Math.random() * 1300);
+    };
+
+    t = setTimeout(show, initialDelay);
+    return () => clearTimeout(t);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="overflow-hidden">
-      <motion.div
-        ref={wrapRef}
-        animate={unitWidth > 0 ? { x: [0, dist] } : { x: 0 }}
-        transition={{
-          duration,
-          repeat: Infinity,
-          ease: 'linear',
-          repeatType: 'loop',
-        }}
-        className="flex gap-8 whitespace-nowrap w-max"
-      >
-        {items.map((name, i) => (
-          <span
-            key={i}
-            className={`font-signature text-2xl md:text-3xl ${nameToColor(name)} drop-shadow-[0_0_8px_currentColor] select-none`}
+    <div
+      className="absolute pointer-events-none"
+      style={{ left: `${slot.x}%`, top: `${slot.y}%`, transform: 'translate(-50%, -50%)' }}
+    >
+      <AnimatePresence mode="wait">
+        {current.visible && (
+          <motion.span
+            key={current.name}
+            initial={{ opacity: 0, scale: 0.75, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, scale: 1,    filter: 'blur(0px)'  }}
+            exit={{    opacity: 0, scale: 0.75, filter: 'blur(10px)' }}
+            transition={{ duration: 0.55, ease: 'easeInOut' }}
+            className={`font-signature text-xl md:text-3xl ${nameToColor(current.name)} drop-shadow-[0_0_12px_currentColor] select-none whitespace-nowrap block`}
           >
-            {name}
-          </span>
-        ))}
-      </motion.div>
+            {current.name}
+          </motion.span>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -134,20 +124,17 @@ export default function ConfirmedCounter() {
   }, []);
 
   const count = signatures.length;
-  const progress = Math.min((count / MAX_SPOTS) * 100, 100);
-
-  // Each row gets an independently seeded shuffle so they're all different
   const names = useMemo(() => signatures.map(s => s.name), [signatures]);
-  const row1 = useMemo(() => shuffle(names, 7), [names]);
-  const row2 = useMemo(() => shuffle(names, 42), [names]);
-  const row3 = useMemo(() => shuffle(names, 99), [names]);
+
+  // Stable random delays per slot — computed once on mount so they don't shift on re-render
+  const slotDelays = useMemo(() => SLOTS.map(() => Math.random() * 2000), []);
 
   return (
     <section className="pt-24 pb-0 px-4 bg-[#050505] border-t border-white/5 relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-neon-purple/10 blur-[120px] pointer-events-none" />
 
-      {/* Counter block */}
+      {/* Counter — just the number */}
       <div className="max-w-2xl mx-auto relative z-10 text-center">
         <motion.p
           initial={{ opacity: 0, y: 16 }}
@@ -175,43 +162,26 @@ export default function ConfirmedCounter() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="font-tech text-gray-400 text-sm tracking-[0.3em] uppercase mb-10"
+          className="font-tech text-gray-400 text-sm tracking-[0.3em] uppercase mb-12"
         >
-          de {MAX_SPOTS} lugares confirmados
+          confirmados
         </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="w-full h-[3px] bg-white/10 rounded-full mb-3 overflow-hidden origin-left"
-        >
-          <motion.div
-            initial={{ width: '0%' }}
-            whileInView={{ width: `${progress}%` }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.6, duration: 1.2, ease: 'easeOut' }}
-            className="h-full bg-gradient-to-r from-neon-purple via-neon-cyan to-neon-pink rounded-full shadow-[0_0_10px_rgba(0,243,255,0.6)]"
-          />
-        </motion.div>
-
-        <p className="font-tech text-xs text-gray-600 tracking-widest uppercase mb-16">
-          {MAX_SPOTS - count} lugares restantes
-        </p>
       </div>
 
-      {/* Names ticker — 3 rows, fills footer space, different speeds & directions */}
+      {/* Floating names — appear & disappear individually at random slots */}
       {names.length > 0 && (
-        <div className="relative mt-4">
-          <div className="space-y-6 py-8">
-            <NameTicker names={row1} direction={1}  speed={60} />
-            <NameTicker names={row2} direction={-1} speed={45} />
-            <NameTicker names={row3} direction={1}  speed={75} />
-          </div>
+        <div className="relative mt-8 min-h-[440px] md:min-h-[520px]">
+          {SLOTS.map((slot, i) => (
+            <FloatingName
+              key={i}
+              names={names}
+              slot={slot}
+              initialDelay={slotDelays[i]}
+            />
+          ))}
 
-          {/* Bottom fade — replaces footer, creates a modern ending */}
-          <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none" />
+          {/* Bottom fade to black — modern page ending */}
+          <div className="absolute bottom-0 left-0 right-0 h-56 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none z-10" />
         </div>
       )}
     </section>
