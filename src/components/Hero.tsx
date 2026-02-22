@@ -69,52 +69,22 @@ export default function Hero() {
             LICENCIA
           </motion.p>
 
-          {/* Giant P — neon tube effect via text-shadow, zero bg-clip-text */}
-          <div className="relative">
-            {/* Scanlines overlay — pure CSS, no filter */}
-            <div
-              className="absolute inset-0 z-10 pointer-events-none opacity-[0.06]"
-              style={{
-                backgroundImage:
-                  'repeating-linear-gradient(0deg, #000 0px, #000 1px, transparent 1px, transparent 4px)',
-              }}
-            />
-
-            {/* Main letter — text-shadow glow, breathing animation */}
-            <motion.span
-              className="font-cyber font-black text-[8.5rem] md:text-[13rem] leading-none block"
-              style={{ color: '#e8f5ff' }}
-              animate={{
-                textShadow: [
-                  '0 0 5px #fff, 0 0 12px #fff, 0 0 22px #fff, 0 0 45px #bc13fe, 0 0 85px #bc13fe, 0 0 95px #bc13fe',
-                  '0 0 5px #fff, 0 0 14px #fff, 0 0 26px #fff, 0 0 55px #bc13fe, 0 0 105px #bc13fe, 0 0 135px #bc13fe',
-                  '0 0 4px #fff, 0 0 10px #fff, 0 0 20px #fff, 0 0 38px #bc13fe, 0 0 75px #bc13fe, 0 0 88px #bc13fe',
-                  '0 0 5px #fff, 0 0 12px #fff, 0 0 22px #fff, 0 0 45px #bc13fe, 0 0 85px #bc13fe, 0 0 95px #bc13fe',
-                ],
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              P
-            </motion.span>
-
-            {/* Glitch strip 1 — pink horizontal tear */}
-            <motion.span
-              aria-hidden
-              className="absolute inset-0 font-cyber font-black text-[8.5rem] md:text-[13rem] leading-none block"
-              style={{ color: '#ff00ff', clipPath: 'inset(22% 0 52% 0)' }}
-              animate={{ x: [-9, 9, -9], opacity: [0, 0.85, 0] }}
-              transition={{ duration: 0.08, repeat: Infinity, repeatDelay: 6.5 }}
-            />
-
-            {/* Glitch strip 2 — cyan bottom slice */}
-            <motion.span
-              aria-hidden
-              className="absolute inset-0 font-cyber font-black text-[8.5rem] md:text-[13rem] leading-none block"
-              style={{ color: '#00f3ff', clipPath: 'inset(58% 0 18% 0)' }}
-              animate={{ x: [6, -6, 6], opacity: [0, 0.6, 0] }}
-              transition={{ duration: 0.08, repeat: Infinity, repeatDelay: 6.5, delay: 0.04 }}
-            />
-          </div>
+          {/* Giant P — neon tube via text-shadow only, no clip-path, no filter */}
+          <motion.span
+            className="font-cyber font-black text-[7.5rem] md:text-[13rem] leading-none block"
+            style={{ color: '#e8f5ff' }}
+            animate={{
+              textShadow: [
+                '0 0 5px #fff, 0 0 12px #fff, 0 0 22px #fff, 0 0 45px #bc13fe, 0 0 85px #bc13fe, 0 0 95px #bc13fe',
+                '0 0 5px #fff, 0 0 14px #fff, 0 0 28px #fff, 0 0 58px #bc13fe, 0 0 110px #bc13fe, 0 0 140px #bc13fe',
+                '0 0 4px #fff, 0 0 10px #fff, 0 0 19px #fff, 0 0 38px #bc13fe, 0 0 72px #bc13fe, 0 0 85px #bc13fe',
+                '0 0 5px #fff, 0 0 12px #fff, 0 0 22px #fff, 0 0 45px #bc13fe, 0 0 85px #bc13fe, 0 0 95px #bc13fe',
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            P
+          </motion.span>
 
           {/* Gradient separator line */}
           <motion.div
