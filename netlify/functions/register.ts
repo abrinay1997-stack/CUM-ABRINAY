@@ -160,13 +160,13 @@ const handler: Handler = async (event) => {
   // Send emails (awaited so Lambda doesn't terminate before they're sent)
   const emailResults = await Promise.allSettled([
     resend.emails.send({
-      from: "LICENCIA P <onboarding@resend.dev>",
+      from: "LICENCIA P <noreply@bukoflow.com>",
       to: newReg.email,
       subject: "ACCESO CONCEDIDO — LICENCIA P · 7 MAR 2026",
       html: userEmailHtml(newReg.name),
     }),
     resend.emails.send({
-      from: "LICENCIA P <onboarding@resend.dev>",
+      from: "LICENCIA P <noreply@bukoflow.com>",
       to: process.env.ADMIN_EMAIL!,
       subject: `[LP] Nuevo registro: ${newReg.name}`,
       html: adminEmailHtml(newReg.name, newReg.email, updated.length),
