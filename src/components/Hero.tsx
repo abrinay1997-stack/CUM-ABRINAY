@@ -14,8 +14,8 @@ export default function Hero() {
         
         {/* Animated Logo */}
         <motion.div
-          initial={{ scale: 0.8, opacity: 0, filter: "blur(10px)" }}
-          animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, ease: "circOut" }}
           className="relative mb-8 group"
         >
