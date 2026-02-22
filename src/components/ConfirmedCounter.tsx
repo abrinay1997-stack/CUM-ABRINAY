@@ -95,9 +95,9 @@ function FloatingName({
         {current.visible && (
           <motion.span
             key={current.name}
-            initial={{ opacity: 0, scale: 0.75, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, scale: 1,    filter: 'blur(0px)'  }}
-            exit={{    opacity: 0, scale: 0.75, filter: 'blur(10px)' }}
+            initial={{ opacity: 0, scale: 0.75 }}
+            animate={{ opacity: 1, scale: 1    }}
+            exit={{    opacity: 0, scale: 0.75 }}
             transition={{ duration: 0.55, ease: 'easeInOut' }}
             className={`font-signature text-xl md:text-3xl ${nameToColor(current.name)} drop-shadow-[0_0_12px_currentColor] select-none whitespace-nowrap block`}
           >
@@ -130,9 +130,15 @@ export default function ConfirmedCounter() {
   const slotDelays = useMemo(() => SLOTS.map(() => Math.random() * 2000), []);
 
   return (
-    <section className="pt-24 pb-0 px-4 bg-[#050505] border-t border-white/5 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-neon-purple/10 blur-[120px] pointer-events-none" />
+    <section
+      className="pt-24 pb-0 px-4 border-t border-white/5 relative overflow-hidden"
+      style={{
+        background: `
+          radial-gradient(ellipse 60% 40% at 50% 33%, rgba(188,19,254,0.10) 0%, transparent 65%),
+          #050505
+        `,
+      }}
+    >
 
       {/* Counter — just the number */}
       <div className="max-w-2xl mx-auto relative z-10 text-center">
@@ -152,7 +158,7 @@ export default function ConfirmedCounter() {
           transition={{ type: 'spring', stiffness: 200, damping: 20 }}
           className="mb-2"
         >
-          <span className="font-cyber text-[96px] md:text-[140px] leading-none font-black text-white drop-shadow-[0_0_60px_rgba(0,243,255,0.5)]">
+          <span className="font-cyber text-[96px] md:text-[140px] leading-none font-black text-white" style={{ textShadow: '0 0 60px rgba(0,243,255,0.5)' }}>
             <AnimatedNumber value={count} />
           </span>
         </motion.div>
@@ -181,7 +187,7 @@ export default function ConfirmedCounter() {
           ))}
 
           {/* Bottom fade to black — modern page ending */}
-          <div className="absolute bottom-0 left-0 right-0 h-56 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none z-10" />
+          <div className="absolute bottom-0 left-0 right-0 h-28 md:h-56 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent pointer-events-none z-10" />
         </div>
       )}
     </section>
