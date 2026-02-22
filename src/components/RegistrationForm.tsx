@@ -85,10 +85,10 @@ export default function RegistrationForm() {
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-neon-purple via-neon-cyan to-neon-purple" />
 
             <div className="flex justify-center mb-6">
-              <Lock className="w-8 h-8 text-neon-cyan drop-shadow-[0_0_12px_rgba(0,243,255,0.8)]" />
+              <Lock className="w-8 h-8 text-neon-cyan" />
             </div>
 
-            <h2 className="text-4xl font-cyber text-center text-white mb-2 uppercase tracking-wider drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+            <h2 className="text-4xl font-cyber text-center text-white mb-2 uppercase tracking-wider" style={{ textShadow: '0 0 20px rgba(255,255,255,0.2)' }}>
               Asegura tu Lugar
             </h2>
             <p className="text-center text-gray-500 mb-8 text-sm font-tech">

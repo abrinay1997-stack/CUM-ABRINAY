@@ -99,7 +99,8 @@ function FloatingName({
             animate={{ opacity: 1, scale: 1    }}
             exit={{    opacity: 0, scale: 0.75 }}
             transition={{ duration: 0.55, ease: 'easeInOut' }}
-            className={`font-signature text-xl md:text-3xl ${nameToColor(current.name)} drop-shadow-[0_0_12px_currentColor] select-none whitespace-nowrap block`}
+            className={`font-signature text-xl md:text-3xl ${nameToColor(current.name)} select-none whitespace-nowrap block`}
+            style={{ textShadow: '0 0 12px currentColor' }}
           >
             {current.name}
           </motion.span>
